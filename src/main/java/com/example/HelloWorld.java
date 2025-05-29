@@ -1,8 +1,19 @@
-package com.example;
+package com.example.demo;
 
-public class HelloWorld {
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+
+@SpringBootApplication
+@RestController
+public class DemoApplication {
+
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
-        
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @GetMapping("/")
+    public String hello() {
+        return "Hello from Java App!";
     }
 }
