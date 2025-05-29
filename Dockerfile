@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/hello-world-1.0-SNAPSHOT.jar /app/hello-world.jar
+COPY target/hello-world-1.0-SNAPSHOT.jar /app/
 
 # Run the JAR file
 CMD ["java", "-jar", "hello-world.jar"]
