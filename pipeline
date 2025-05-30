@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git pull') {
+            steps {
+                git url: 'https://github.com/Juhi5863/java.git', branch: 'main'
+                echo 'Hello World'
+            }
+        }
+        stage('copy'){
+            steps{
+                sh '''
+                cp /root/java-pipeline/java_trial/k8s/* /root/.jenkins/workspace/java-trail/k8s/
+                '''
+            }
+        }
+        stage('mvn'){
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+        stage('image'){
+            steps{
+                sh 'docker build -t juhichoudhary/java-pipeline .'
+            }
+        }
+        stage('push'){
+            steps{
+                withDockerRegistry([credentialsId: 'docker-creds', url: '']){
+                    sh 'docker push juhichoudhary/java-pipeline'
+                }
+            }
+        }
+        stage('k8s'){
+            steps{
+                withCredentials([file(credentialsId: 'kube-config', variable: 'KUBECONFIG')]){
+                    sh 'kubectl apply -f k8s/. --namespace=default'
+                }
+            }
+        }
+    }
+}
